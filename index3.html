@@ -7,26 +7,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redux</title>
     <script src="./redux.min.js"></script>
+    <script src="./immer.umd.production.min.js"></script>
 </head>
 
 <body>
     <script>
 
         const MUDAR_NOME = 'MUDAR_NOME';
+        const MUDAR_IDADE = 'MUDAR_IDADE';
 
-        const initialState = {
+        //Immer
+        const obj1 = {
             nome: 'Nathália',
             idade: 21
         }
 
-        function reducer(state = initialState, action) {
-            switch (action.type) {
-                case MUDAR_NOME:
-                    return {...state, nome: action.payload};
-                default:
-                    return state;
+        const obj2 = immer.produce(obj1, (draft) => {
+            draft.idade = 22;
+        });
+
+        // console.log(obj2);
+        // console.log(obj1);
+
+
+        const initialState = {
+            nome: 'Nathália',
+            sobre: {
+                dados: {
+                    idade: 21
+                }
             }
         }
+
+        const reducer = immer.produce((state, action) => {
+            switch (action.type) {
+                case MUDAR_NOME:
+                    state.nome = action.payload;
+                    break;
+                case MUDAR_IDADE:
+                    state.sobre.dados.idade = action.payload;
+                    break;
+            }
+        }, initialState);
 
 
         const store = Redux.createStore(
@@ -37,6 +59,8 @@
         store.dispatch({type: MUDAR_NOME, payload: 'Maria'});
         store.dispatch({type: MUDAR_NOME, payload: 'Igor'});
         store.dispatch({type: MUDAR_NOME, payload: 'Valéria'});
+        store.dispatch({type: MUDAR_IDADE, payload: 35});
+        store.dispatch({type: MUDAR_IDADE, payload: 36});
         
 
     </script>
