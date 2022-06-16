@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,7 @@
     <title>Redux</title>
     <script src="./redux.min.js"></script>
 </head>
+
 <body>
     <div>
         <h1>Total: <span id="total"></span></h1>
@@ -19,48 +21,59 @@
         const INCREMENTAR = 'INCREMENTAR';
         const SOMAR = 'SOMAR'
 
-        //Action Creator
-        function incrementar(){
+        //Action Creator que retorna uma action
+        function incrementar() {
             return { type: INCREMENTAR }
         }
 
-        function somar(payload){
+        function somar(payload) {
             return { type: SOMAR, payload }
         }
 
         const initialState = 0;
 
-        //Modifica o estado
+        //Função que Modifica o estado - ProductReducer
+        //É uma função pura que só modifica o estado
+        //Recebe o estado atual, a ação que irá modificar o estado
+        //Vai retornar um novo estado
         function contador(state = initialState, action) {
+            console.log('state', state);
+            console.log("action", action);
+
             switch (action.type) {
                 case INCREMENTAR:
                     return state + 1;
                 case SOMAR:
                     return state + action.payload;
-                default:    
+                default:
                     return state;
             }
         }
 
+
+        //Função que Modifica o estado
         function modal(state = true, action) {
             switch (action.type) {
                 case 'ABRIR':
                     return true;
                 case 'FECHAR':
                     return false;
-                default:    
+                default:
                     return state;
             }
         }
 
-        const reducer = Redux.combineReducers({contador, modal});
+        //eu passo a action dentro do reducer
+        const reducer = Redux.combineReducers({ contador, modal });
         const store = Redux.createStore(reducer);
 
+        //Tudo o que acontecer com a interface quando o estado muda é colocado aqui
         function render() {
-            const {contador, modal} = store.getState();
+            const { contador, modal } = store.getState();
+            console.log(contador)
             const total = document.getElementById('total');
             total.innerText = contador;
-            if (modal) { 
+            if (modal) {
                 total.style.display = 'inline-block';
             } else {
                 total.style.display = 'none';
@@ -69,16 +82,19 @@
         render();
 
         store.subscribe(render);
+
+        //Envia um objeto com o type e payload para o reducer
         store.dispatch(somar(30))
 
         const button = document.getElementById('button');
         button.addEventListener('click', () => store.dispatch(incrementar()));
 
         const abrir = document.getElementById('abrir');
-        abrir.addEventListener('click', () => store.dispatch({type: 'ABRIR'}));
+        abrir.addEventListener('click', () => store.dispatch({ type: 'ABRIR' }));
         const fechar = document.getElementById('fechar');
-        fechar.addEventListener('click', () => store.dispatch({type: 'FECHAR'}));
+        fechar.addEventListener('click', () => store.dispatch({ type: 'FECHAR' }));
 
     </script>
 </body>
+
 </html>
