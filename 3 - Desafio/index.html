@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Redux</title>
+    <script src="./redux.min.js"></script>
+</head>
+<body>
+    <h1 id="aluno"></h1>
+    <h1 id="aula"></h1>
+    <script type="module">
+        import {incrementarTempo, reduzirTempo, modificarEmail} from './store/aluno.js';
+        import {completarAula, completarCurso, resetarCurso} from './store/aulas.js';
+        import store from './store/configureStore.js';
+
+        function render() {
+            const {aluno, aulas} = store.getState();
+            const aulasE1 = document.getElementById('aulas');
+            const alunoE1 = document.getElementById('aluno');
+            aulasE1.innerText = aulas.filter(aula => aula.completa === true).length;
+            alunoE1.innerText = `${aluno.nome} - ${aluno.email} - ${aluno.diasRestantes}`;
+        }
+        render();
+
+        store.subscribe(render);
+
+        store.dispatch(resetarCurso());
+        store.dispatch(completarCurso());
+        store.dispatch(completarAula(3));
+        store.dispatch(modificarEmail('nathalia.u@aluno.ifsp.edu.br'));
+        store.dispatch(reduzirTempo());
+        store.dispatch(incrementarTempo());
+
+
+    </script>
+</body>
+</html>
