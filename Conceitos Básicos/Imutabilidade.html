@@ -12,10 +12,6 @@
 
 <body>
     <script>
-
-        const MUDAR_NOME = 'MUDAR_NOME';
-        const MUDAR_IDADE = 'MUDAR_IDADE';
-
         //Immer
         const obj1 = {
             nome: 'Nathália',
@@ -26,9 +22,12 @@
             draft.idade = 22;
         });
 
-        // console.log(obj2);
-        // console.log(obj1);
-
+        console.log(obj2);
+        console.log(obj1);
+        
+        //Imutabilidade
+        const MUDAR_NOME = 'MUDAR_NOME';
+        const MUDAR_IDADE = 'MUDAR_IDADE';
 
         const initialState = {
             nome: 'Nathália',
@@ -39,6 +38,7 @@
             }
         }
 
+        //O immer.produce retorna um objeto novo
         const reducer = immer.produce((state, action) => {
             switch (action.type) {
                 case MUDAR_NOME:
