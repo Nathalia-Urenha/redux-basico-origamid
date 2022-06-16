@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux</title>
+    <script src="./redux.min.js"></script>
+    <script src="./immer.umd.production.min.js"></script>
+</head>
+
+<body>
+    <script>
+        //Immer
+        const obj1 = {
+            nome: 'Nathália',
+            idade: 21
+        }
+
+        const obj2 = immer.produce(obj1, (draft) => {
+            draft.idade = 22;
+        });
+
+        console.log(obj2);
+        console.log(obj1);
+        
+        //Imutabilidade
+        const MUDAR_NOME = 'MUDAR_NOME';
+        const MUDAR_IDADE = 'MUDAR_IDADE';
+
+        const initialState = {
+            nome: 'Nathália',
+            sobre: {
+                dados: {
+                    idade: 21
+                }
+            }
+        }
+
+        //O immer.produce retorna um objeto novo
+        const reducer = immer.produce((state, action) => {
+            switch (action.type) {
+                case MUDAR_NOME:
+                    state.nome = action.payload;
+                    break;
+                case MUDAR_IDADE:
+                    state.sobre.dados.idade = action.payload;
+                    break;
+            }
+        }, initialState);
+
+
+        const store = Redux.createStore(
+            reducer,
+            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+        );
+
+        store.dispatch({type: MUDAR_NOME, payload: 'Maria'});
+        store.dispatch({type: MUDAR_NOME, payload: 'Igor'});
+        store.dispatch({type: MUDAR_NOME, payload: 'Valéria'});
+        store.dispatch({type: MUDAR_IDADE, payload: 35});
+        store.dispatch({type: MUDAR_IDADE, payload: 36});
+        
+
+    </script>
+</body>
+
+</html>
