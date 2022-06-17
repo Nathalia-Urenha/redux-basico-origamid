@@ -22,6 +22,7 @@
             aulasE1.innerText = aulas.filter(aula => aula.completa === true).length;
             alunoE1.innerText = `${aluno.nome} - ${aluno.email} - ${aluno.diasRestantes}`;
         }
+        
         render();
 
         store.subscribe(render);
