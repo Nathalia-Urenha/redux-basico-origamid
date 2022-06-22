@@ -2,16 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const slice = createSlice({
     name: 'contador',
-    initialState: {
-        total: 0,
-    },
+    initialState: 0,
     reducers: {
-        incrementar(state) {
-            state.total++;
-        },
-        reduzir(state) {
-            state.total--;
-        },
+        incrementar: (state) => state + 1,
+        reduzir: (state) => state - 1,
     },
 });
 
