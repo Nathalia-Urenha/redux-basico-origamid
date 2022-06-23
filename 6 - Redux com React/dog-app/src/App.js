@@ -1,13 +1,19 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux'
-import { login } from './store/login';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
+import { autoLogin, login } from './store/login';
 
 function App() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const dispatch = useDispatch();
+
+  const {data} = useSelector(state => state.login.user);
+
+  useEffect(() => {
+    dispatch(autoLogin());
+  }, [dispatch]);
+
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -32,6 +38,7 @@ function App() {
           onChange={({ target }) => setPassword(target.value)}>
         </input>
         <button>Enviar</button>
+        <p>{data?.email}</p>
       </form>
     </div>
   )

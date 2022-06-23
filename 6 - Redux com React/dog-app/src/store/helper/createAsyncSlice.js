@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const createAsyncSlice = (config) => {
 
-    console.log(config);
-
     const slice = createSlice({
         name: config.name,
         initialState: {
