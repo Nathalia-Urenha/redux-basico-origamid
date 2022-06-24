@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux'
 import Header from './Components/Header/Header';
 import { autoLogin } from './store/login';
@@ -9,7 +9,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  React.useEffect(() => {
     dispatch(autoLogin());
   }, [dispatch]);
 

@@ -4,10 +4,10 @@ import { ListPhotos, ItemPhoto, Image, Title, Acessos } from './style'
 
 function PhotosContent() {
 
-    const { data } = useSelector(state => state.photos);
+    const { list } = useSelector(state => state.photos);
 
     return (
-        <ListPhotos>{data.map((photo) => (
+        <ListPhotos>{list.map((photo) => (
             <ItemPhoto key={photo.id}>
                 <Image src={photo.src} alt={photo.title} />
                 <Title>{photo.title}</Title>
