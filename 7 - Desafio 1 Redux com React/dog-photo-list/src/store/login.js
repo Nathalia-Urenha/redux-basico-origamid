@@ -1,68 +1,68 @@
-import createAsyncSlice from "./helper/createAsyncSlice";
 import { combineReducers } from '@reduxjs/toolkit';
-import getLocalStorage from "./helper/getLocalStorage";
+import createAsyncSlice from './helper/createAsyncSlice';
+import getLocalStorage from './helper/getLocalStorage';
+import { removePhotos } from './photos';
 
 const token = createAsyncSlice({
-    name: 'token',
-    initialState: {
-        data: {
-            token: getLocalStorage('token', null),
-        }
+  name: 'token',
+  initialState: {
+    data: {
+      token: getLocalStorage('token', null),
     },
-    reducers: {
-        removeToken(state) {
-            state.data = null
-        },
-        fetchSuccess: {
-            reducer(state, action) {
-                state.loading = false;
-                state.data = action.payload;
-                state.error = null;
-            },
-            prepare(payload) {
-                return {
-                    payload,
-                    meta: {
-                        localStorage: {
-                            key: 'token',
-                            value: payload.token
-                        }
-                    }
-                }
-            }
-        }
+  },
+  reducers: {
+    removeToken(state) {
+      state.data = null;
     },
-    fetchConfig: (user) => ({
-        url: 'https://dogsapi.origamid.dev/json/jwt-auth/v1/token',
-        options: {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
+    fetchSuccess: {
+      reducer(state, action) {
+        state.loading = false;
+        state.data = action.payload;
+        state.error = null;
+      },
+      prepare(payload) {
+        return {
+          payload,
+          meta: {
+            localStorage: {
+              key: 'token',
+              value: payload.token,
             },
-            body: JSON.stringify(user),
-        }
-    })
+          },
+        };
+      },
+    },
+  },
+  fetchConfig: (user) => ({
+    url: 'https://dogsapi.origamid.dev/json/jwt-auth/v1/token',
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    },
+  }),
 });
 
 const user = createAsyncSlice({
-    name: 'token',
-    reducers: {
-        removeUser(state) {
-            state.data = null
-        },
+  name: 'user',
+  reducers: {
+    removeUser(state) {
+      state.data = null;
     },
-    fetchConfig: (token) => ({
-        url: 'https://dogsapi.origamid.dev/json/api/user',
-        options: {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        },
-    })
+  },
+  fetchConfig: (token) => ({
+    url: 'https://dogsapi.origamid.dev/json/api/user',
+    options: {
+      method: 'GET',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    },
+  }),
 });
-
-const reducer = combineReducers({ token: token.reducer, user: user.reducer })
+const reducer = combineReducers({ token: token.reducer, user: user.reducer });
 
 const fetchToken = token.asyncAction;
 const fetchUser = user.asyncAction;
@@ -73,20 +73,21 @@ const { removeUser } = user.actions;
 export default reducer;
 
 export const login = (user) => async (dispatch) => {
-    try {
-        const { payload } = await dispatch(fetchToken(user));
-        if (payload.token !== undefined) await dispatch(fetchUser(payload.token));
-    } catch { }
+  try {
+    const { payload } = await dispatch(fetchToken(user));
+    if (payload.token !== undefined) await dispatch(fetchUser(payload.token));
+  } catch {}
 };
 
 export const autoLogin = () => async (dispatch, getState) => {
-    const state = getState();
-    const { token } = state.login.token.data;
-    if (token) await dispatch(fetchUser(token));
+  const state = getState();
+  const { token } = state.login.token.data;
+  if (token) await dispatch(fetchUser(token));
 };
 
 export const userLogout = () => (dispatch) => {
-    dispatch(removeToken());
-    dispatch(removeUser());
-    window.localStorage.removeItem('token');
-}
+  dispatch(removeUser());
+  dispatch(removeToken());
+  dispatch(removePhotos());
+  window.localStorage.removeItem('token');
+};

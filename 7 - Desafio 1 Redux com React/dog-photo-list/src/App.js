@@ -1,12 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
 import Header from './Components/Header/Header';
+import Content from './Components/Content/Content';
 import { autoLogin } from './store/login';
 import './App.css';
-import Content from './Components/Content/Content';
 
 function App() {
-
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -18,8 +17,7 @@ function App() {
       <Header />
       <Content />
     </div>
-  )
-
+  );
 }
 
 export default App;
